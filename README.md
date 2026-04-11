@@ -1,7 +1,3 @@
-Aqui está um **README completo** pronto para colocar no repositório do teste 👇
-
----
-
 # 🧪 Teste Técnico — Backend Laravel (Concessionária)
 
 Olá! 👋
