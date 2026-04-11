@@ -3,7 +3,7 @@
 Olá! 👋
 Este é o teste técnico para a vaga de **Desenvolvedor Backend Júnior**.
 
-O objetivo é avaliar organização de código, conhecimento em API REST, Laravel, PostgreSQL e documentação de APIs com Postman.
+O objetivo é avaliar organização de código, API REST, Laravel, PostgreSQL, Docker e documentação de APIs com Postman.
 
 ---
 
@@ -18,13 +18,40 @@ Cenário: sistema interno de uma concessionária.
 
 ---
 
-# ⚙️ Tecnologias obrigatórias
+# ⚙️ Tecnologias e ferramentas
+
+O projeto deve ser desenvolvido utilizando o seguinte stack:
 
 * PHP 8+
 * Laravel
 * PostgreSQL
+* Docker
+* Docker Compose
+* Nginx
 * Git
-* Postman (coleção exportada obrigatória)
+* Postman (coleção exportada)
+
+---
+
+# 🐳 Ambiente de execução
+
+A aplicação deve rodar em containers com a seguinte estrutura:
+
+* app → PHP-FPM + Laravel
+* nginx → servidor web
+* postgres → banco de dados
+
+A aplicação deve ficar acessível em:
+
+```
+http://localhost:8000
+```
+
+Após subir os containers deve ser possível executar as migrations via:
+
+```bash
+docker compose exec app php artisan migrate
+```
 
 ---
 
@@ -72,13 +99,13 @@ Relacionamento:
 
 Criar autenticação simples (Sanctum ou JWT).
 
-Rota obrigatória:
+Rota esperada:
 
 ```
 POST /api/login
 ```
 
-Somente usuários autenticados podem:
+Usuários autenticados podem:
 
 * Criar, editar e remover veículos
 * Listar leads
@@ -87,9 +114,9 @@ A criação de lead deve ser pública.
 
 ---
 
-# 🚀 Funcionalidades obrigatórias
+# 🚀 Funcionalidades esperadas
 
-## CRUD de Vehicles (autenticado)
+## CRUD de Vehicles
 
 ```
 GET    /api/vehicles
@@ -99,31 +126,31 @@ PUT    /api/vehicles/{id}
 DELETE /api/vehicles/{id}
 ```
 
-### Regras de validação
+Validações:
 
 * model obrigatório
 * year ≥ 2000
 * price > 0
-* type deve ser car ou motorcycle
+* type deve ser `car` ou `motorcycle`
 
 ---
 
 ## Leads
 
-### Criar lead (público)
+Criar lead:
 
 ```
 POST /api/leads
 ```
 
-### Listar leads (autenticado)
+Listar leads:
 
 ```
 GET /api/leads
 GET /api/vehicles/{id}/leads
 ```
 
-### Regras
+Validações:
 
 * email válido
 * telefone obrigatório
@@ -131,24 +158,22 @@ GET /api/vehicles/{id}/leads
 
 ---
 
-# ⭐ Diferenciais (opcional – vale pontos)
+# ⭐ Diferenciais que agregam valor
 
-Implemente 1 ou mais:
-
-### Filtros de veículos
+Filtros:
 
 ```
 GET /api/vehicles?type=car
 GET /api/vehicles?max_price=80000
 ```
 
-### Endpoint de dashboard
+Dashboard:
 
 ```
 GET /api/dashboard
 ```
 
-Exemplo de resposta:
+Exemplo:
 
 ```json
 {
@@ -158,24 +183,23 @@ Exemplo de resposta:
 }
 ```
 
-### Outros diferenciais
+Outros pontos que agregam:
 
 * Seeders
 * Paginação
 * Testes automatizados
-* Docker
 
 ---
 
-# 📮 Entrega do teste
+# 📮 Como realizar o teste
 
-## 1️⃣ Faça um FORK deste repositório
+## 1️⃣ Fazer um FORK do repositório
 
-Clique em **Fork** e desenvolva o projeto no seu repositório.
+Clique em **Fork** e desenvolva no seu próprio repositório.
 
 ---
 
-## 2️⃣ Crie uma branch
+## 2️⃣ Criar uma branch
 
 ```
 git checkout -b feature/teste-backend
@@ -183,37 +207,40 @@ git checkout -b feature/teste-backend
 
 ---
 
-## 3️⃣ Abra um Pull Request
+## 3️⃣ Desenvolver a solução
 
-Ao finalizar, abra um PR para este repositório contendo:
+---
 
-Informar na descrição do PR:
+## 4️⃣ Enviar a entrega
+
+Abrir um Pull Request contendo:
+
+Informar na descrição:
 
 * Nome completo
 * E-mail
 * Tempo gasto para concluir
-* Observações (opcional)
+* Observações (se houver)
 
 ---
 
-# 📬 Entregáveis obrigatórios
+# 📬 Entregáveis
 
-Seu repositório deve conter:
+O repositório deve conter:
 
-### ✔ Projeto Laravel funcionando
+### ✔ Projeto Laravel funcional
 
-Com `.env.example` configurado para PostgreSQL.
+Com `.env.example` configurado.
 
 ### ✔ README com:
 
-* Passo a passo de instalação
-* Como configurar banco PostgreSQL
-* Como rodar migrations
 * Como rodar o projeto
+* Como subir os containers
+* Como rodar migrations
 
-### ✔ Coleção Postman exportada
+### ✔ Coleção Postman exportada (.json)
 
-Arquivo `.json` contendo:
+Contendo:
 
 * Login
 * CRUD Vehicles
@@ -221,5 +248,4 @@ Arquivo `.json` contendo:
 * Listar Leads
 * Dashboard (se implementado)
 
-Boa sorte! 🚀
-
+Boa sorte 🚀
