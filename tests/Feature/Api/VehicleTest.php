@@ -10,7 +10,7 @@ it('can list vehicles publicly', function () {
     $response = $this->getJson('/api/vehicles');
 
     $response->assertStatus(200)
-        ->assertJsonStructure(['data', 'current_page']);
+        ->assertJsonStructure(['success', 'data', 'meta']);
 });
 
 it('can filter vehicles by type', function () {
@@ -39,7 +39,7 @@ it('can show a vehicle', function () {
     $response = $this->getJson("/api/vehicles/{$vehicle->id}");
 
     $response->assertStatus(200)
-        ->assertJson(['id' => $vehicle->id]);
+        ->assertJson(['success' => true, 'data' => ['id' => $vehicle->id]]);
 });
 
 it('can create a vehicle when authenticated', function () {
@@ -57,7 +57,7 @@ it('can create a vehicle when authenticated', function () {
     ]);
 
     $response->assertStatus(201)
-        ->assertJson(['model' => 'Civic']);
+        ->assertJson(['success' => true, 'data' => ['model' => 'Civic']]);
 });
 
 it('cannot create a vehicle when unauthenticated', function () {
@@ -100,7 +100,7 @@ it('can update a vehicle when authenticated', function () {
     ]);
 
     $response->assertStatus(200)
-        ->assertJson(['model' => 'Updated Model']);
+        ->assertJson(['success' => true, 'data' => ['model' => 'Updated Model']]);
 });
 
 it('can delete a vehicle when authenticated', function () {

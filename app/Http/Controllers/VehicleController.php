@@ -22,7 +22,18 @@ class VehicleController extends Controller
             $query->where('price', '<=', $request->input('max_price'));
         }
 
-        return $query->paginate(15);
+        $vehicles = $query->paginate(15);
+
+        return response()->json([
+            'success' => true,
+            'data' => $vehicles->items(),
+            'meta' => [
+                'current_page' => $vehicles->currentPage(),
+                'last_page' => $vehicles->lastPage(),
+                'per_page' => $vehicles->perPage(),
+                'total' => $vehicles->total(),
+            ],
+        ]);
     }
 
     /**
@@ -44,7 +55,11 @@ class VehicleController extends Controller
 
         $vehicle = Vehicle::create($validated);
 
-        return response()->json($vehicle, 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Veículo criado com sucesso.',
+            'data' => $vehicle,
+        ], 201);
     }
 
     /**
@@ -52,7 +67,10 @@ class VehicleController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
-        return $vehicle;
+        return response()->json([
+            'success' => true,
+            'data' => $vehicle,
+        ]);
     }
 
     /**
@@ -72,7 +90,11 @@ class VehicleController extends Controller
 
         $vehicle->update($validated);
 
-        return response()->json($vehicle);
+        return response()->json([
+            'success' => true,
+            'message' => 'Veículo atualizado com sucesso.',
+            'data' => $vehicle,
+        ]);
     }
 
     /**
@@ -82,6 +104,9 @@ class VehicleController extends Controller
     {
         $vehicle->delete();
 
-        return response()->json(null, 204);
+        return response()->json([
+            'success' => true,
+            'message' => 'Veículo removido com sucesso.',
+        ], 204);
     }
 }

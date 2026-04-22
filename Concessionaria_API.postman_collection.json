@@ -1,0 +1,314 @@
+{
+  "info": {
+    "name": "Concessionária API",
+    "description": "Coleção de requisições para a API REST de Concessionária (Veículos e Leads)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticação",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "login"]
+            },
+            "description": "Autenticação via Sanctum. Retorna token de acesso."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Veículos",
+      "item": [
+        {
+          "name": "Listar Veículos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/vehicles?type=car&max_price=100000",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "vehicles"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "car",
+                  "description": "Opcional: car ou motorcycle"
+                },
+                {
+                  "key": "max_price",
+                  "value": "100000",
+                  "description": "Opcional: filtrar por preço máximo"
+                }
+              ]
+            },
+            "description": "Listagem pública de veículos com paginação e filtros."
+          },
+          "response": []
+        },
+        {
+          "name": "Detalhes do Veículo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/vehicles/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "vehicles", "1"]
+            },
+            "description": "Retorna os detalhes de um veículo específico."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Veículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"car\",\n  \"brand\": \"Honda\",\n  \"model\": \"Civic\",\n  \"year\": 2024,\n  \"price\": 150000.00,\n  \"color\": \"Prata\",\n  \"mileage\": 0\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/vehicles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "vehicles"]
+            },
+            "description": "Cria um novo veículo. Requer autenticação."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Veículo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 140000.00,\n  \"color\": \"Preto\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/vehicles/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "vehicles", "1"]
+            },
+            "description": "Atualiza um veículo existente. Requer autenticação."
+          },
+          "response": []
+        },
+        {
+          "name": "Remover Veículo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/vehicles/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "vehicles", "1"]
+            },
+            "description": "Remove um veículo. Requer autenticação."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Leads",
+      "item": [
+        {
+          "name": "Criar Lead",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao@teste.com\",\n  \"phone\": \"(11) 99999-9999\",\n  \"vehicle_id\": 1,\n  \"message\": \"Tenho interesse neste veículo\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/leads",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "leads"]
+            },
+            "description": "Cria um lead de interesse em um veículo. Endpoint público."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Leads",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/leads",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "leads"]
+            },
+            "description": "Lista todos os leads com paginação. Requer autenticação."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Leads por Veículo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/vehicles/1/leads",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "vehicles", "1", "leads"]
+            },
+            "description": "Lista os leads de um veículo específico. Requer autenticação."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Estatísticas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/dashboard",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "dashboard"]
+            },
+            "description": "Retorna estatísticas do sistema. Requer autenticação."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

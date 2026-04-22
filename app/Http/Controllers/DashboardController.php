@@ -22,9 +22,12 @@ class DashboardController extends Controller
             ->first();
 
         return response()->json([
-            'total_vehicles' => $totalVehicles,
-            'total_leads' => $totalLeads,
-            'most_requested_vehicle' => $mostRequestedVehicle ? $mostRequestedVehicle->brand . ' ' . $mostRequestedVehicle->model : null,
+            'success' => true,
+            'data' => [
+                'total_vehicles' => $totalVehicles,
+                'total_leads' => $totalLeads,
+                'most_requested_vehicle' => $mostRequestedVehicle ? $mostRequestedVehicle->brand . ' ' . $mostRequestedVehicle->model : null,
+            ],
         ]);
     }
 }

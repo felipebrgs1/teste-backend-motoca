@@ -15,7 +15,7 @@ it('can login with valid credentials', function () {
     ]);
 
     $response->assertStatus(200)
-        ->assertJsonStructure(['token', 'user']);
+        ->assertJsonStructure(['success', 'message', 'data' => ['token', 'user']]);
 });
 
 it('cannot login with invalid credentials', function () {

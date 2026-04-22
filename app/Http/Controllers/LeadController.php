@@ -13,7 +13,18 @@ class LeadController extends Controller
      */
     public function index()
     {
-        return Lead::with('vehicle')->paginate(15);
+        $leads = Lead::with('vehicle')->paginate(15);
+
+        return response()->json([
+            'success' => true,
+            'data' => $leads->items(),
+            'meta' => [
+                'current_page' => $leads->currentPage(),
+                'last_page' => $leads->lastPage(),
+                'per_page' => $leads->perPage(),
+                'total' => $leads->total(),
+            ],
+        ]);
     }
 
     /**
@@ -31,7 +42,11 @@ class LeadController extends Controller
 
         $lead = Lead::create($validated);
 
-        return response()->json($lead->load('vehicle'), 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead criado com sucesso.',
+            'data' => $lead->load('vehicle'),
+        ], 201);
     }
 
     /**
@@ -39,7 +54,10 @@ class LeadController extends Controller
      */
     public function show(Lead $lead)
     {
-        return $lead->load('vehicle');
+        return response()->json([
+            'success' => true,
+            'data' => $lead->load('vehicle'),
+        ]);
     }
 
     /**
@@ -47,6 +65,17 @@ class LeadController extends Controller
      */
     public function byVehicle(Vehicle $vehicle)
     {
-        return $vehicle->leads()->paginate(15);
+        $leads = $vehicle->leads()->paginate(15);
+
+        return response()->json([
+            'success' => true,
+            'data' => $leads->items(),
+            'meta' => [
+                'current_page' => $leads->currentPage(),
+                'last_page' => $leads->lastPage(),
+                'per_page' => $leads->perPage(),
+                'total' => $leads->total(),
+            ],
+        ]);
     }
 }

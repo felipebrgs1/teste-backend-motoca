@@ -17,7 +17,7 @@ it('can create a lead publicly', function () {
     ]);
 
     $response->assertStatus(201)
-        ->assertJson(['name' => 'João Silva']);
+        ->assertJson(['success' => true, 'data' => ['name' => 'João Silva']]);
 });
 
 it('validates lead creation', function () {
@@ -41,7 +41,7 @@ it('can list leads when authenticated', function () {
     $response = $this->actingAs($user, 'sanctum')->getJson('/api/leads');
 
     $response->assertStatus(200)
-        ->assertJsonStructure(['data', 'current_page']);
+        ->assertJsonStructure(['success', 'data', 'meta']);
 });
 
 it('cannot list leads when unauthenticated', function () {

@@ -16,7 +16,7 @@ it('can view dashboard when authenticated', function () {
     $response = $this->actingAs($user, 'sanctum')->getJson('/api/dashboard');
 
     $response->assertStatus(200)
-        ->assertJsonStructure(['total_vehicles', 'total_leads', 'most_requested_vehicle']);
+        ->assertJsonStructure(['success', 'data' => ['total_vehicles', 'total_leads', 'most_requested_vehicle']]);
 });
 
 it('cannot view dashboard when unauthenticated', function () {
