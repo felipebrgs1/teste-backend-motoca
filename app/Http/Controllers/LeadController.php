@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lead;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
@@ -12,7 +13,7 @@ class LeadController extends Controller
      */
     public function index()
     {
-        //
+        return Lead::with('vehicle')->paginate(15);
     }
 
     /**
@@ -20,7 +21,17 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:255',
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'message' => 'nullable|string',
+        ]);
+
+        $lead = Lead::create($validated);
+
+        return response()->json($lead->load('vehicle'), 201);
     }
 
     /**
@@ -28,22 +39,14 @@ class LeadController extends Controller
      */
     public function show(Lead $lead)
     {
-        //
+        return $lead->load('vehicle');
     }
 
     /**
-     * Update the specified resource in storage.
+     * List leads for a specific vehicle.
      */
-    public function update(Request $request, Lead $lead)
+    public function byVehicle(Vehicle $vehicle)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Lead $lead)
-    {
-        //
+        return $vehicle->leads()->paginate(15);
     }
 }

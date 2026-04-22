@@ -1,58 +1,119 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Concessionária API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST desenvolvida em Laravel para gerenciamento de veículos e leads de uma concessionária.
 
-## About Laravel
+## Tecnologias
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.4
+- Laravel 13
+- PostgreSQL 16
+- Docker & Docker Compose
+- Nginx
+- Laravel Sanctum (autenticação)
+- Pest PHP (testes)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Como rodar o projeto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clonar e entrar no diretório
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repo>
+cd <repo>
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Subir os containers
 
-## Contributing
+```bash
+docker compose up -d --build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+A aplicação ficará disponível em: `http://localhost:8000`
 
-## Code of Conduct
+### 3. Rodar as migrations
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+docker compose exec app php artisan migrate
+```
 
-## Security Vulnerabilities
+### 4. (Opcional) Rodar os seeders
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+docker compose exec app php artisan db:seed
+```
 
-## License
+Isso criará:
+- 1 usuário de teste (`test@example.com` / `password`)
+- 30 veículos
+- 85 leads
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Rodar os testes
+
+```bash
+php artisan test --compact
+```
+
+## Endpoints da API
+
+### Autenticação
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/api/login` | Login e geração de token | Pública |
+
+### Veículos
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/vehicles` | Listar veículos (com filtros) | Pública |
+| GET | `/api/vehicles/{id}` | Detalhes do veículo | Pública |
+| POST | `/api/vehicles` | Criar veículo | Sanctum |
+| PUT | `/api/vehicles/{id}` | Atualizar veículo | Sanctum |
+| DELETE | `/api/vehicles/{id}` | Remover veículo | Sanctum |
+
+**Filtros disponíveis:**
+- `?type=car` ou `?type=motorcycle`
+- `?max_price=80000`
+
+### Leads
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/api/leads` | Criar lead | Pública |
+| GET | `/api/leads` | Listar leads | Sanctum |
+| GET | `/api/vehicles/{id}/leads` | Leads por veículo | Sanctum |
+
+### Dashboard
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/dashboard` | Estatísticas | Sanctum |
+
+## Exemplos de uso
+
+### Login
+```bash
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password"}'
+```
+
+### Criar veículo (autenticado)
+```bash
+curl -X POST http://localhost:8000/api/vehicles \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{"type":"car","model":"Civic","year":2024,"price":150000,"color":"Prata","mileage":0}'
+```
+
+### Criar lead (público)
+```bash
+curl -X POST http://localhost:8000/api/leads \
+  -H "Content-Type: application/json" \
+  -d '{"name":"João Silva","email":"joao@teste.com","phone":"(11) 99999-9999","vehicle_id":1}'
+```
+
+## Estrutura Docker
+
+- `app` → PHP-FPM + Laravel
+- `nginx` → Servidor web (porta 8000)
+- `postgres` → Banco de dados PostgreSQL
