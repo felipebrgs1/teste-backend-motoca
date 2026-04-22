@@ -11,6 +11,7 @@ API REST desenvolvida em Laravel para gerenciamento de veículos e leads de uma 
 - Nginx
 - Laravel Sanctum (autenticação)
 - Pest PHP (testes)
+- Swagger (documentação L5-Swagger)
 
 ## Como rodar o projeto
 
@@ -50,6 +51,18 @@ Isso criará:
 
 ```bash
 php artisan test --compact
+```
+
+## Documentação (Swagger)
+
+A documentação completa da API (OpenAPI 3.0) está disponível através do Swagger UI.
+
+Para acessar a interface interativa:
+- URL: `http://localhost:8000/api/documentation`
+
+Para gerar/atualizar a documentação após alterações nas anotações:
+```bash
+docker compose exec app php artisan l5-swagger:generate
 ```
 
 ## Endpoints da API
