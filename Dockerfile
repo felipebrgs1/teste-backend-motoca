@@ -17,7 +17,8 @@ WORKDIR /var/www
 
 COPY --chown=www-data:www-data . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction \
+RUN git config --global --add safe.directory /var/www \
+    && composer install --no-interaction \
     && php artisan config:cache \
     && php artisan route:cache
 
